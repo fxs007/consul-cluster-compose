@@ -1,46 +1,204 @@
 version: '2.0'
+networks:
+#docker network ls/rm
+  dc1_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.16.101.0/24
+
 services:
-  consul1:
+  node-1:
     image: consul:latest
-    hostname: "consul1"
+    hostname: "node-1"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.11
     ports:
       - "8400:8400"
       - "8500:8500"
       - "8600:8600"
-    command: "agent -server -bootstrap-expect 3 -ui -disable-host-node-id -client 0.0.0.0"
-  consul2:
+    volumes:
+      - ./node-1:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+
+  web-dc1-1:
+    image: nginx:latest
+    hostname: "web-dc1-1"
+    networks:
+      dc1_net:
+
+  web-dc1-2:
+    image: nginx:latest
+    hostname: "web-dc1-2"
+    networks:
+      dc1_net:
+
+  redis-dc1:
+    image: redis:latest
+    #hostname: "redis-1"
+    networks:
+      dc1_net:
+
+  node-2:
     image: consul:latest
-    hostname: "consul2"
-    command: "agent -server -join consul1 -disable-host-node-id"
+    hostname: "node-2"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.12
+    ports:
+      - "8420:8400"
+      - "8520:8500"
+      - "8620:8600"
+    volumes:
+      - ./node-2:/etc/consul.d/server/
+    entrypoint: consul agent -config-dir /etc/consul.d/server/
     depends_on: 
-      - consul1
-  consul3:
+      - node-1
+
+  node-3:
     image: consul:latest
-    hostname: "consul3"
-    command: "agent -server -join consul1 -disable-host-node-id"
-    depends_on:
-      - consul1
-  consul4:
+    hostname: "node-3"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.13
+    ports:
+      - "8430:8400"
+      - "8530:8500"
+      - "8630:8600"
+    volumes:
+      - ./node-3:/etc/consul.d/server/
+    entrypoint: consul agent -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-1
+
+  node-4:
     image: consul:latest
-    hostname: "consul4"
-    command: "agent -join consul1 -disable-host-node-id"
-    depends_on:
-      - consul1
-  consul5:
+    hostname: "node-4"
+    networks:
+      dc1_net:
+    ports:
+      - "8440:8400"
+      - "8540:8500"
+      - "8640:8600"
+    volumes:
+      - ./node-4:/etc/consul.d/server/
+    entrypoint: consul agent -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-1
+
+  node-5:
     image: consul:latest
-    hostname: "consul5"
-    command: "agent -server -join consul1 -disable-host-node-id"
-    depends_on:
-      - consul1
-  consul6:
+    hostname: "node-5"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.15
+    ports:
+      - "8450:8400"
+      - "8550:8500"
+      - "8650:8600"
+    volumes:
+      - ./node-5:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+
+  web-dc2-1:
+    image: nginx:latest
+    hostname: "web-dc2-1"
+    networks:
+      dc1_net:
+
+  redis-dc2:
+    image: redis:latest
+    networks:
+      dc1_net:
+
+  node-6:
     image: consul:latest
-    hostname: "consul6"
-    command: "agent -join consul1 -disable-host-node-id"
-    depends_on:
-      - consul1
-  consul7:
+    hostname: "node-6"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.16
+    ports:
+      - "8460:8400"
+      - "8560:8500"
+      - "8660:8600"
+    volumes:
+      - ./node-6:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-5
+
+  node-7:
     image: consul:latest
-    hostname: "consul7"
-    command: "agent -join consul1 -disable-host-node-id"
-    depends_on:
-      - consul1
+    hostname: "node-7"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.17
+    ports:
+      - "8470:8400"
+      - "8570:8500"
+      - "8670:8600"
+    volumes:
+      - ./node-7:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-5
+
+  node-8:
+    image: consul:latest
+    hostname: "node-8"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.18
+    ports:
+      - "8480:8400"
+      - "8580:8500"
+      - "8680:8600"
+    volumes:
+      - ./node-8:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+
+  web-dc3-1:
+    image: nginx:latest
+    hostname: "web-dc3-1"
+    networks:
+      dc1_net:
+
+  redis-dc3:
+    image: redis:latest
+    networks:
+      dc1_net:
+
+  node-9:
+    image: consul:latest
+    hostname: "node-9"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.19
+    ports:
+      - "8490:8400"
+      - "8590:8500"
+      - "8690:8600"
+    volumes:
+      - ./node-9:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-8
+
+  node-a:
+    image: consul:latest
+    hostname: "node-a"
+    networks:
+      dc1_net:
+        ipv4_address: 172.16.101.20
+    ports:
+      - "9400:8400"
+      - "9500:8500"
+      - "9600:8600"
+    volumes:
+      - ./node-a:/etc/consul.d/server/
+    entrypoint: consul agent -ui -config-dir /etc/consul.d/server/
+    depends_on: 
+      - node-8

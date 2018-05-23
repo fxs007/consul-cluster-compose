@@ -1,0 +1,12 @@
+{
+        "server": false,
+	"datacenter": "dc1",
+	"data_dir": "/opt/consul/4",
+	"log_level": "INFO",
+	"node_name": "node-4",
+        "retry_join": [
+          "node-1:8301",
+          "node-2:8301",
+          "node-3:8301"
+        ]
+}

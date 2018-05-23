@@ -1,0 +1,36 @@
+{
+  "services":[
+    {
+      "id":"web-dc1-1",
+      "name":"web-server",
+      "address": "web-dc1-1",
+      "port":80,
+      "tags":[
+        "tag1",
+        "nginx",
+        "demo"
+      ],
+      "check":{
+        "tcp":"web-dc1-1:80",
+        "interval":"10s",
+        "timeout":"1s"
+      }
+    },
+    {
+      "id":"web-dc1-2",
+      "name":"web-server",
+      "address": "web-dc1-2",
+      "port":80,
+      "tags":[
+        "tag1",
+        "nginx",
+        "demo"
+      ],
+      "check":{
+        "http":"http://web-dc1-2:80",
+        "interval":"10s",
+        "timeout":"1s"
+      }
+    }
+  ]
+}

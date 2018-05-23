@@ -1,0 +1,11 @@
+{
+        "server": false,
+	"datacenter": "test",
+	"data_dir": "/opt/consul/4",
+	"log_level": "INFO",
+	"node_name": "node-4",
+	"ports": {
+		"dns": 18640,
+		"http": 18540
+	}
+}

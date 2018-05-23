@@ -1,0 +1,18 @@
+{
+        "server": true,
+	"datacenter": "dc1",
+	"data_dir": "/opt/consul/3",
+	"log_level": "DEBUG",
+	"node_name": "node-3",
+	"client_addr": "0.0.0.0",
+        "retry_join": [
+          "node-1:8301",
+          "node-2:8301",
+          "node-3:8301"
+        ],
+        "retry_join_wan": [
+          "node-5:8302",
+          "node-6:8302",
+          "node-7:8302"
+        ]
+}
